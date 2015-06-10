@@ -34,8 +34,18 @@ integer = Word(digits).setParseAction(convertIntegers)
 elementRef = Group(element("symbol") + Optional(integer, default=1)("qty"))
 chemicalFormula = OneOrMore(elementRef)
 
+equnExpr = Group(OneOrMore(chemicalFormula+"+") +  chemicalFormula)
+chemicalEqun = Group(equnExpr.setResultsName("lhs") + "->" + equnExpr.setResultsName("rhs"))
+test_equn = chemicalEqun.parseString(sys.argv[1])
 
 from pprint import pprint
+
+print(test_equn)
+# WHYYYYYY DOESN'T THIS WORKKKKKKKKKKKK!
+print("LHS: " + test_equn["lhs"])
+print("RHS: " + test_equn["rhs"])
+
+print("OLD PARSING RESULTS")
 
 lhs_dict = {}
 print("LHS:")
