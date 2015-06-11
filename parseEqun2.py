@@ -1,6 +1,6 @@
 import re
 import sys
-from pyparsing import Word, Optional, OneOrMore, Group, ParseException
+from pyparsing import * 
 
 # define some strings to use later, when describing valid lists 
 # of characters for chemical symbols and numbers
@@ -8,7 +8,8 @@ caps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 lowers = caps.lower()
 digits = "0123456789"
 
-equn = sys.argv[1]
+# equn = sys.argv[1]
+equn = "H + O -> H2O"
 equn = equn.replace(" ","")
 lhs, rhs = equn.split("->",1)
 lhs = lhs.split("+")
@@ -34,16 +35,16 @@ integer = Word(digits).setParseAction(convertIntegers)
 elementRef = Group(element("symbol") + Optional(integer, default=1)("qty"))
 chemicalFormula = OneOrMore(elementRef)
 
-equnExpr = Group(OneOrMore(chemicalFormula+"+") +  chemicalFormula)
-chemicalEqun = Group(equnExpr.setResultsName("lhs") + "->" + equnExpr.setResultsName("rhs"))
-test_equn = chemicalEqun.parseString(sys.argv[1])
+equnExpr = Group(ZeroOrMore(chemicalFormula+"+") +  chemicalFormula)
+chemicalEqun = Group(equnExpr.setResultsName('lhs') + "->" + equnExpr.setResultsName('rhs'))
+test_equn = chemicalEqun.parseString("H + O -> H2O")
 
 from pprint import pprint
 
 print(test_equn)
 # WHYYYYYY DOESN'T THIS WORKKKKKKKKKKKK!
-print("LHS: " + test_equn["lhs"])
-print("RHS: " + test_equn["rhs"])
+print("LHS: " + test_equn.lhs)
+print("RHS: " + test_equn.rhs)
 
 print("OLD PARSING RESULTS")
 
