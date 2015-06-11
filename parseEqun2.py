@@ -34,17 +34,25 @@ element = Word(caps, lowers)
 integer = Word(digits).setParseAction(convertIntegers)
 elementRef = Group(element("symbol") + Optional(integer, default=1)("qty"))
 chemicalFormula = OneOrMore(elementRef)
-
-equnExpr = Group(ZeroOrMore(chemicalFormula+"+") +  chemicalFormula)
-chemicalEqun = Group(equnExpr.setResultsName('lhs') + "->" + equnExpr.setResultsName('rhs'))
+plusSign = '+'
+equnExpr = Group(ZeroOrMore(chemicalFormula+Suppress(plusSign)) +  chemicalFormula)
+chemicalEqun = equnExpr.setResultsName('lhs') + "->" + equnExpr.setResultsName('rhs')
 test_equn = chemicalEqun.parseString("H + O -> H2O")
 
 from pprint import pprint
 
 print(test_equn)
+print(test_equn.keys())
 # WHYYYYYY DOESN'T THIS WORKKKKKKKKKKKK!
-print("LHS: " + test_equn.lhs)
-print("RHS: " + test_equn.rhs)
+print("LHS: ")
+pprint(test_equn['lhs'])
+print("RHS: ")
+pprint(test_equn['rhs'])
+LHS = test_equn['lhs'].asList()
+RHS = test_equn['rhs'].asList()
+print(LHS)
+print('then')
+print(RHS)
 
 print("OLD PARSING RESULTS")
 
@@ -56,7 +64,7 @@ for formula in lhs:
     # print the results
     print(formula, "->", formulaData)
     print("FORMULA", formulaData)
-    lhs_dict[formula] = list(formulaData)
+    lhs_dict[formula] = formulaData.asList()
 
 pprint(lhs_dict)
 
@@ -70,7 +78,7 @@ for formula in rhs :
     
     # print the results
     print( formula, "->", formulaData )
-    rhs_dict[formula] = formulaData
+    rhs_dict[formula] = formulaData.asList()
 
 print(rhs_dict)
 print
