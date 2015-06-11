@@ -13,7 +13,7 @@ def convertIntegers(tokens):
 element = Word(caps, lowers)
 integer = Word(digits).setParseAction(convertIntegers)
 elementRef = Group(element("symbol") + Optional(integer, default=1)("qty"))
-chemicalFormula = OneOrMore(elementRef)
+chemicalFormula = Group(OneOrMore(elementRef))
 plusSign = '+'
 equnExpr = Group(ZeroOrMore(chemicalFormula+Suppress(plusSign)) +  chemicalFormula)
 chemicalEqun = equnExpr.setResultsName('lhs') + "->" + equnExpr.setResultsName('rhs')
