@@ -1,23 +1,19 @@
-import re
-import sys
 from pyparsing import Word, Group, Optional, OneOrMore, ZeroOrMore, Suppress
 from string import ascii_uppercase, ascii_lowercase, digits
 
-#equn = sys.argv[1]
+# equn = sys.argv[1]
 def convertIntegers(tokens):
     return int(tokens[0])
 
-
-#ele = Word(uppercase, lowercase)
-#inte = Word(digits).setParseAction(convertIntegers)
-#element = Group(ele + Optional(inte, default=1))
-#chemGroup = Group(Suppress('(') + 
-#term = 
-
+# ele = Word(uppercase, lowercase)
+# inte = Word(digits).setParseAction(convertIntegers)
+# element = Group(ele + Optional(inte, default=1))
+# chemGroup = Group(Suppress('(') + 
+# term =
 
 element = Word(ascii_uppercase, ascii_lowercase)
 integer = Word(digits).setParseAction(convertIntegers)
-elementRef = Group(element("symbol") + Optional(integer, default=1)("qty"))
+elementRef = Group(element + Optional(integer, default=1))
 chemicalFormula = Group(OneOrMore(elementRef))
 plusSign = '+'
 equnExpr = Group(ZeroOrMore(chemicalFormula+Suppress(plusSign)) +  chemicalFormula)
@@ -35,4 +31,3 @@ RHS = test_equn['rhs'].asList()
 print(RHS)
 
 print
-
