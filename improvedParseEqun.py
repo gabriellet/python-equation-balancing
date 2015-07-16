@@ -1,6 +1,6 @@
 from pyparsing import Word, Group, Optional, OneOrMore, ZeroOrMore, Suppress
 from string import ascii_uppercase, ascii_lowercase, digits
-from pprint import pprint
+# from pprint import pprint
 
 # equn = sys.argv[1]
 def convertIntegers(tokens):
@@ -17,7 +17,7 @@ integer = Word(digits).setParseAction(convertIntegers)
 elementRef = Group(element + Optional(integer, default=1))
 chemicalFormula = OneOrMore(elementRef)
 
-cForm = Word(ascii_uppercase, ascii_uppercase+ascii_lowercase+digits)
+cForm = Word(ascii_uppercase, ascii_uppercase + ascii_lowercase + digits)
 equnExpr = Group(ZeroOrMore(cForm + Suppress('+')) + cForm)
 lhs = equnExpr.setResultsName('lhs')
 rhs = equnExpr.setResultsName('rhs')
@@ -43,11 +43,10 @@ rhsDict = {}
 for f in LHS:
     print(f)
     lhsDict[f] = dict(chemicalFormula.parseString(f).asList())
-    
+
 for f in RHS:
     print(f)
     rhsDict[f] = dict(chemicalFormula.parseString(f).asList())
-    
 
 print(lhsDict)
 print(rhsDict)
