@@ -14,19 +14,39 @@ def convertIntegers(tokens):
 
 element = Word(ascii_uppercase, ascii_lowercase)
 integer = Word(digits).setParseAction(convertIntegers)
-elementRef = Group(element + Optional(integer, default=1))
+elementRef = Group(element('sym') + Optional(integer, default=1)('qty'))
 chemicalFormula = Group(OneOrMore(elementRef))
-plusSign = '+'
-equnExpr = Group(ZeroOrMore(chemicalFormula + Suppress(plusSign)) + chemicalFormula)
-chemicalEqun = equnExpr.setResultsName('lhs') + "->" + equnExpr.setResultsName('rhs')
-test_equn = chemicalEqun.parseString("H + O -> H2O")
 
-print(test_equn)
+cForm = Word(ascii_uppercase, ascii_uppercase+ascii_lowercase+digits)
+equnExpr = Group(ZeroOrMore(cForm + Suppress('+')) + cForm)
+chemicalEqun = equnExpr.setResultsName('lhs') + "->" + equnExpr.setResultsName('rhs')
+testEqun = chemicalEqun.parseString("H2 + O2 -> H2O")
+
+print(testEqun)
 print("LHS: ")
-LHS = test_equn['lhs'].asList()
+LHS = testEqun['lhs'].asList()
 print(LHS)
 print("RHS: ")
-RHS = test_equn['rhs'].asList()
+RHS = testEqun['rhs'].asList()
 print(RHS)
 
+print
+
+lhsDict = {}
+temp = ()
+tempList = []
+
+for f in LHS:
+    print(f)
+    data = elementRef.parseString(f)
+    for d in data:
+        temp = (data.sym, data.qty)
+        print(temp)
+        tempList.append(temp)
+    lhsDict[f] = tempList
+    temp = ()
+    tempList = []
+    
+
+print(lhsDict)
 print
