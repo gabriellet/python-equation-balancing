@@ -9,13 +9,13 @@ def convertIntegers(tokens):
 # ele = Word(uppercase, lowercase)
 # inte = Word(digits).setParseAction(convertIntegers)
 # element = Group(ele + Optional(inte, default=1))
-# chemGroup = Group(Suppress('(') +
+# chemGroup = Group(Suppress('(') + OneOrMore(element) + Suppress(')')
 # term =
 
 element = Word(ascii_uppercase, ascii_lowercase)
 integer = Word(digits).setParseAction(convertIntegers)
 elementRef = Group(element + Optional(integer, default=1))
-# chemicalFormula = Group(OneOrMore(elementRef))
+chemicalFormula = OneOrMore(elementRef)
 
 cForm = Word(ascii_uppercase, ascii_uppercase+ascii_lowercase+digits)
 equnExpr = Group(ZeroOrMore(cForm + Suppress('+')) + cForm)
@@ -36,31 +36,18 @@ print
 
 lhsDict = {}
 temp = ()
+dataDict = {}
 tempList = []
 rhsDict = {}
 
 for f in LHS:
     print(f)
-    data = elementRef.parseString(f).asList()
-    print(data)
-    for d in data:
-        temp = tuple(data)
-        print(temp)
-        tempList.append(temp)
-    lhsDict[f] = tempList
-    temp = ()
-    tempList = []
+    lhsDict[f] = dict(chemicalFormula.parseString(f).asList())
     
 for f in RHS:
     print(f)
-    data = elementRef.parseString(f).asList()
-    for d in data:
-        temp = tuple(data)
-        print(temp)
-        tempList.append(temp)
-    rhsDict[f] = tempList
-    temp = ()
-    tempList = []
+    rhsDict[f] = dict(chemicalFormula.parseString(f).asList())
+    
 
 print(lhsDict)
 print(rhsDict)
