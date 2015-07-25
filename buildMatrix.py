@@ -7,10 +7,10 @@ def buildMatrix(lhs, rhs):
 
     # figure out number rows
     l = {key for c in lhs.values()
-	     for key in c}
+            for key in c}
 
     r = {key for c in rhs.values()
-	     for key in c}
+            for key in c}
 
     rows = len(l | r)
     mat = sp.zeros(rows, cols)

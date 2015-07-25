@@ -15,7 +15,7 @@ def parseEqun(equation):
 
     lhsDict = {}
     rhsDict = {}
-    tempDict = defaultdict(int)	# should be Counter
+    tempDict = defaultdict(int) # should be Counter
     tempList = []
 
     element = Word(ascii_uppercase, ascii_lowercase)
