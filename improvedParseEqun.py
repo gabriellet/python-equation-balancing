@@ -1,6 +1,6 @@
 from pyparsing import Word, Group, Optional, OneOrMore, ZeroOrMore, Suppress
 from string import ascii_uppercase, ascii_lowercase, digits
-from collections import defaultdict, Counter
+from collections import Counter
 
 def parseEqun(equation):
     cForm = Word(ascii_uppercase, ascii_uppercase + ascii_lowercase + digits)
@@ -15,8 +15,6 @@ def parseEqun(equation):
 
     lhsDict = {}
     rhsDict = {}
-    tempDict = defaultdict(int) # should be Counter
-    tempList = []
 
     element = Word(ascii_uppercase, ascii_lowercase)
     integer = Word(digits).setParseAction(lambda x: int(x[0]))
