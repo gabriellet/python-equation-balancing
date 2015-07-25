@@ -1,4 +1,3 @@
-from itertools import chain
 import sympy as sp
 
 def buildMatrix(lhs, rhs):
@@ -7,17 +6,13 @@ def buildMatrix(lhs, rhs):
     cols = len(lhs) + len(rhs)
 
     # figure out number rows
-    l = []
-    for c in lhs:
-        l = chain(l, list(lhs[c].keys()))
+    l = {key for c in lhs.values()
+	     for key in c}
 
-    for c in rhs:
-        l = chain(l, list(rhs[c].keys()))
+    r = {key for c in rhs.values()
+	     for key in c}
 
-    t = list(l)
-    r = set(t)
-    rows = len(r)
-
+    rows = len(l | r)
     mat = sp.zeros(rows, cols)
 
     print(rows)

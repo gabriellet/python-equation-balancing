@@ -1,16 +1,8 @@
 from pyparsing import Word, Group, Optional, OneOrMore, ZeroOrMore, Suppress
 from string import ascii_uppercase, ascii_lowercase, digits
-from collections import defaultdict
-
-def convertIntegers(tokens):
-    return int(tokens[0])
+from collections import defaultdict, Counter
 
 def parseEqun(equation):
-    element = Word(ascii_uppercase, ascii_lowercase)
-    integer = Word(digits).setParseAction(convertIntegers)
-    elementRef = Group(element + Optional(integer, default=1))
-    chemicalFormula = OneOrMore(elementRef)
-
     cForm = Word(ascii_uppercase, ascii_uppercase + ascii_lowercase + digits)
     equnExpr = Group(ZeroOrMore(cForm + Suppress('+')) + cForm)
     lhs = equnExpr.setResultsName('lhs')
@@ -23,25 +15,22 @@ def parseEqun(equation):
 
     lhsDict = {}
     rhsDict = {}
-    tempDict = defaultdict(int)
+    tempDict = defaultdict(int)	# should be Counter
     tempList = []
 
-    for f in LHS:
-        tempList = chemicalFormula.parseString(f).asList()
-        print(tempList)
-        for k, v in tempList:
-            tempDict[k] += v
-            print(tempDict)
-        lhsDict[f] = tempDict
-        tempDict = defaultdict(int)
+    element = Word(ascii_uppercase, ascii_lowercase)
+    integer = Word(digits).setParseAction(lambda x: int(x[0]))
+    elementRef = Group(element + Optional(integer, default=1))
+    chemicalFormula = OneOrMore(elementRef)
 
-    for f in RHS:
-        tempList = chemicalFormula.parseString(f).asList()
-        print(tempList)
-        for k, v in tempList:
-            tempDict[k] += v
-            print(tempDict)
-        rhsDict[f] = tempDict
-        tempDict = defaultdict(int)
+    for chemical in LHS:
+        lhsDict[chemical] = Counter()
+        for element, count in chemicalFormula.parseString(chemical):
+            lhsDict[chemical][element] += count
+
+    for chemical in RHS:
+        rhsDict[chemical] = Counter()
+        for element, count in chemicalFormula.parseString(chemical):
+            rhsDict[chemical][element] += count
 
     return lhsDict, rhsDict
