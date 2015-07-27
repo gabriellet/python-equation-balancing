@@ -20,14 +20,14 @@ def buildMatrix(lhs, rhs):
     print(mat)
 
     # return rows, cols, mat
-    
+
     for j, chem in enumerate(lhs.keys()):
         for i, ele in enumerate(lhs[chem].keys()):
-            mat[i,j] = lhs[chem][ele]
-            
+            mat[i, j] = lhs[chem][ele]
+
     for j, chem in enumerate(rhs.keys(), len(lhs)):
         for i, ele in enumerate(rhs[chem].keys()):
-            mat[i,j] = -rhs[chem][ele]
+            mat[i, j] = -rhs[chem][ele]
 
     print(mat)
 
