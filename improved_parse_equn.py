@@ -1,34 +1,35 @@
+import pyparsing as pp
 from pyparsing import Word, Group, Optional, OneOrMore, ZeroOrMore, Suppress
 from string import ascii_uppercase, ascii_lowercase, digits
 from collections import Counter
 
-def parseEqun(equation):
-    cForm = Word(ascii_uppercase, ascii_uppercase + ascii_lowercase + digits)
-    equnExpr = Group(ZeroOrMore(cForm + Suppress('+')) + cForm)
-    lhs = equnExpr.setResultsName('lhs')
-    rhs = equnExpr.setResultsName('rhs')
-    chemicalEqun = lhs + "->" + rhs
-    parsedEqun = chemicalEqun.parseString(equation)
+def parse_equn(equation):
+    c_form = pp.Word(ascii_uppercase, ascii_uppercase + ascii_lowercase + digits)
+    equn_expr = pp.Group(pp.ZeroOrMore(c_form + pp.Suppress('+')) + c_form)
+    lhs = equn_expr.setResultsName('lhs')
+    rhs = equn_expr.setResultsName('rhs')
+    chemical_equn = lhs + "->" + rhs
+    parsed_equn = chemical_equn.parseString(equation)
 
-    LHS = parsedEqun['lhs'].asList()
-    RHS = parsedEqun['rhs'].asList()
+    LHS = parsed_equn['lhs'].asList()
+    RHS = parsed_Equn['rhs'].asList()
 
-    lhsDict = {}
-    rhsDict = {}
+    lhs_dict = {}
+    rhs_dict = {}
 
-    element = Word(ascii_uppercase, ascii_lowercase)
-    integer = Word(digits).setParseAction(lambda x: int(x[0]))
-    elementRef = Group(element + Optional(integer, default=1))
-    chemicalFormula = OneOrMore(elementRef)
+    element = pp.Word(ascii_uppercase, ascii_lowercase)
+    integer = pp.Word(digits).setParseAction(lambda x: int(x[0]))
+    element_ref = pp.Group(element + pp.Optional(integer, default=1))
+    chemical_formula = pp.OneOrMore(element_ref)
 
     for chemical in LHS:
-        lhsDict[chemical] = Counter()
-        for element, count in chemicalFormula.parseString(chemical):
-            lhsDict[chemical][element] += count
+        lhs_dict[chemical] = Counter()
+        for element, count in chemical_formula.parseString(chemical):
+            lhs_dict[chemical][element] += count
 
     for chemical in RHS:
-        rhsDict[chemical] = Counter()
-        for element, count in chemicalFormula.parseString(chemical):
-            rhsDict[chemical][element] += count
+        rhs_dict[chemical] = Counter()
+        for element, count in chemical_formula.parseString(chemical):
+            rhs_dict[chemical][element] += count
 
-    return lhsDict, rhsDict
+    return lhs_dict, rhs_dict
