@@ -12,7 +12,7 @@ def parse_equn(equation):
     parsed_equn = chemical_equn.parseString(equation)
 
     LHS = parsed_equn['lhs'].asList()
-    RHS = parsed_Equn['rhs'].asList()
+    RHS = parsed_equn['rhs'].asList()
 
     lhs_dict = {}
     rhs_dict = {}

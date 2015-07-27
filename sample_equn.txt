@@ -1,1 +1,5 @@
 MgO + Fe -> Fe2O3 + Mg
+C3H8 + O2 -> H2O + CO2
+KClO3 -> KCl + O2
+F2 + NH3 -> N2F2 + HF
+C6H5Cl+O2->CO+H2O+Cl2
