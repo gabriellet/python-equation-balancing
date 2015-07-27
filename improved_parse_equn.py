@@ -1,5 +1,4 @@
 import pyparsing as pp
-from pyparsing import Word, Group, Optional, OneOrMore, ZeroOrMore, Suppress
 from string import ascii_uppercase, ascii_lowercase, digits
 from collections import Counter
 
